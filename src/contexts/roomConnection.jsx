@@ -1,5 +1,5 @@
 import { createContext, useEffect, useRef, useState } from "react";
-
+import { WS_BASE } from "../api";
 export const RoomConnectionContext = createContext();
 
 export default function RoomConnectionProvider({ roomId, username, children }) {
@@ -33,7 +33,7 @@ export default function RoomConnectionProvider({ roomId, username, children }) {
 
       try {
         if (ws.current) ws.current.close();
-        const socket = new WebSocket(`ws://localhost:8000/ws/room/${roomId}/`);
+        const socket = new WebSocket(WS_BASE + `/room/${roomId}/`);
         ws.current = socket;
 
         socket.onopen = () => {

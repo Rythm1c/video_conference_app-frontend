@@ -10,6 +10,7 @@ import RoomCard from "../components/RoomCard";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import TopBar from "../components/TopBar";
+import { API_BASE } from "../api";
 
 
 export default function ListRooms() {
@@ -22,6 +23,7 @@ export default function ListRooms() {
     const [search, setSearch] = useState("");
     const navigate = useNavigate();
 
+
     useEffect(() => {
         if (!token) {
             // If there’s no token in localStorage or AuthContext, redirect to login
@@ -29,7 +31,7 @@ export default function ListRooms() {
             return;
         }
 
-        axios.get("/rooms/list/", {
+        axios.get(API_BASE + "/rooms/list/", {
             headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
         })
             .then((res) => setRooms(res.data))
@@ -55,7 +57,7 @@ export default function ListRooms() {
 
     const handleConfirm = async () => {
         try {
-            await axios.post("/rooms/join/", {
+            await axios.post(API_BASE + "/rooms/join/", {
                 code: selected.code, password
             }, {
                 headers: { Authorization: `Bearer ${token}` }

@@ -19,6 +19,7 @@ import Tooltip from '@mui/material/Tooltip';
 import Popover from '@mui/material/Popover';
 
 import { RoomConnectionContext } from "../contexts/roomConnection";
+import { API_BASE } from "../api";
 
 export default function CanvasWhiteboard({ chatOpen, roomId, username, token }) {
   const canvasRef = useRef(null);
@@ -111,7 +112,7 @@ export default function CanvasWhiteboard({ chatOpen, roomId, username, token }) 
     const ctx = canvas.getContext("2d");
 
     // Load initial canvas state
-    fetch(`http://localhost:8000/api/rooms/${roomId}/canvas/`, {
+    fetch(API_BASE + `/rooms/${roomId}/canvas/`, {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then((res) => res.json())
@@ -235,7 +236,7 @@ export default function CanvasWhiteboard({ chatOpen, roomId, username, token }) 
   };
 
   const handleSave = () => {
-    fetch(`http://localhost:8000/api/rooms/${roomId}/canvas/`, {
+    fetch(API_BASE + `/rooms/${roomId}/canvas/`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",

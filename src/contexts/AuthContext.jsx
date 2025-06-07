@@ -1,4 +1,5 @@
 import { createContext, useState, useEffect } from 'react';
+import { API_BASE } from '../api';
 import axios from 'axios';
 
 export const AuthContext = createContext();
@@ -13,7 +14,7 @@ export function AuthProvider({ children }) {
 
     useEffect(() => {
         // Set axios defaults whenever token changes
-        axios.defaults.baseURL = '/api';   // proxy to Django
+
         if (token) {
             localStorage.setItem('token', token);
             axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
@@ -24,14 +25,14 @@ export function AuthProvider({ children }) {
     }, [token]);
 
     const login = async (username, password) => {
-        const res = await axios.post('/login/', { username, password });
+        const res = await axios.post(API_BASE + '/login/', { username, password });
         setToken(res.data.access);
         setUser({ username });
         localStorage.setItem('username', username);
     };
 
     const register = async (username, password) => {
-        await axios.post('/register/', { username, password });
+        await axios.post(API_BASE + '/register/', { username, password });
         // auto-login
         return login(username, password);
     };
