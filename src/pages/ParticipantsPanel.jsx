@@ -168,9 +168,18 @@ export default function ParticipantsPanel({ streams, setStreams, canvasOpen, use
         });
 
         return () => {
-            pcs.current.forEach((pc) => pc.close());
-            pcs.current.clear();
-            setStreams({});
+            const currentPeers = new Set(users);
+            for (const [peer, pc] of pcs.current.entries()) {
+                if (!currentPeers.has(peer)) {
+                    pc.close();
+                    pcs.current.delete(peer);
+                    setStreams(prev => {
+                        const newStreams = { ...prev };
+                        delete newStreams[peer];
+                        return newStreams;
+                    });
+                }
+            }
         };
     }, [users, username, canvasOpen, connected]);
 
