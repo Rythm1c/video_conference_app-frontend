@@ -2,7 +2,7 @@
 import { useParams } from "react-router-dom";
 import { useContext, useState, useRef } from "react";
 import { AuthContext } from "../contexts/AuthContext";
-import { Container, Grid, Box, Typography } from "@mui/material";
+import { Container, Box } from "@mui/material";
 import CanvasWhiteboard from "./canvas";
 
 import ParticipantsPanel from "./ParticipantsPanel";
@@ -12,7 +12,18 @@ import RoomControls from "../components/RoomControls";
 import RoomConnectionProvider from "../contexts/roomConnection";
 
 // no canvas open
-const FirstLayout = ({ chatOpen, canvasOpen, messages, setMessages, user, users, setUsers, localStream, roomId }) => {
+const FirstLayout = ({
+    streams,
+    setStreams,
+    chatOpen,
+    canvasOpen,
+    messages,
+    setMessages,
+    user,
+    users,
+    setUsers,
+    localStream,
+    roomId }) => {
     return (
         <Box sx={{
             gridColumn: '1 / 4', // Span all columns
@@ -30,6 +41,8 @@ const FirstLayout = ({ chatOpen, canvasOpen, messages, setMessages, user, users,
                 transition: 'width 1.0s ease' // Smooth transition when chat opens/closes
             }}>
                 <ParticipantsPanel
+                    setStreams={setStreams}
+                    streams={streams}
                     users={users}
                     setUsers={setUsers}
                     roomId={roomId}
@@ -56,7 +69,19 @@ const FirstLayout = ({ chatOpen, canvasOpen, messages, setMessages, user, users,
     );
 }
 // canvas open
-const SecondLayout = ({ chatOpen, users, setUsers, messages, setMessages, token, canvasOpen, user, localStream, roomId }) => {
+const SecondLayout = ({
+    streams,
+    setStreams,
+    chatOpen,
+    users,
+    setUsers,
+    messages,
+    setMessages,
+    token,
+    canvasOpen,
+    user,
+    localStream,
+    roomId }) => {
     return (
         <Box sx={{
             gridColumn: '1 / 4',
@@ -106,6 +131,8 @@ const SecondLayout = ({ chatOpen, users, setUsers, messages, setMessages, token,
                     borderRadius: 0
                 }}>
                 <ParticipantsPanel
+                    streams={streams}
+                    setStreams={setStreams}
                     roomId={roomId}
                     users={users}
                     setUsers={setUsers}
@@ -128,10 +155,6 @@ export default function RoomPage() {
     const [remoteStreams, setRemoteStreams] = useState({});
     const [messages, setMessages] = useState([]);
 
-    const handleRemoteStream = (peer, stream) => {
-        setRemoteStreams((prev) => ({ ...prev, [peer]: stream }));
-    };
-
     return (
         <RoomConnectionProvider roomId={roomId} username={user.username}>
             <Container disableGutters maxWidth="xxl"
@@ -146,6 +169,8 @@ export default function RoomPage() {
                 }}>
                 {canvasOpen ?
                     <SecondLayout
+                        setStreams={setRemoteStreams}
+                        streams={remoteStreams}
                         chatOpen={chatOpen}
                         canvasOpen={canvasOpen}
                         user={user}
@@ -158,6 +183,8 @@ export default function RoomPage() {
                         roomId={roomId} />
                     :
                     <FirstLayout
+                        setStreams={setRemoteStreams}
+                        streams={remoteStreams}
                         messages={messages}
                         setMessages={setMessages}
                         chatOpen={chatOpen}

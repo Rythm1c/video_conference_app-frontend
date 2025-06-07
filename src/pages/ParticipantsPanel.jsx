@@ -8,11 +8,10 @@ import VideocamOffIcon from "@mui/icons-material/VideocamOff";
 import VideoCard from "../components/VideoCard";
 import { RoomConnectionContext } from "../contexts/roomConnection";
 
-export default function ParticipantsPanel({ canvasOpen, users, setUsers, roomId, username, localStream }) {
+export default function ParticipantsPanel({ streams, setStreams, canvasOpen, users, setUsers, roomId, username, localStream }) {
     const { subscribe, connected, sendMessage, pcs: pcsMap } = useContext(RoomConnectionContext);
     const pcs = useRef(pcsMap); // Use the pcs from context
     const [readyPeers, setReadyPeers] = useState(new Set());
-    const [streams, setStreams] = useState({});
     const [status, setStatus] = useState({}); // { username: { mic: bool, cam: bool } }
     const [userRows, setUserRows] = useState([]);
 
