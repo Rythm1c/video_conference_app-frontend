@@ -6,7 +6,7 @@ import {
 } from "@mui/material";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-
+import { API_BASE } from "../api"
 export default function CreateRoom() {
     const { token } = useContext(AuthContext);
     const [name, setName] = useState("");
@@ -21,8 +21,7 @@ export default function CreateRoom() {
         setError("");
         setAckPassword(null);
         try {
-            const res = await axios.post(
-                "/rooms/create/",
+            const res = await axios.post(API_BASE + "/rooms/create/",
                 { name, is_private: isPrivate, password: password.trim() || undefined },
                 { headers: { Authorization: `Bearer ${token}` } }
             );
