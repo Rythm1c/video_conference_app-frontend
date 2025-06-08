@@ -46,7 +46,7 @@ export default function Register() {
                     justifyContent: 'center',
                     mb: 2,
                     borderRadius: 1,
-                    bgcolor: 'skyblue',
+                    background: 'linear-gradient(to left,rgb(104, 200, 238),rgb(38, 128, 230))',
                     padding: 1
                 }}
                 onHover={{ cursor: 'pointer' }}>

@@ -29,11 +29,11 @@ export default function Login() {
                     justifyContent: 'center',
                     mb: 2,
                     borderRadius: 1,
-                    bgcolor: 'skyblue',
+                    background: 'linear-gradient(to left,rgb(104, 200, 238),rgb(38, 128, 230))',
                     padding: 1
                 }}
                 onHover={{ cursor: 'pointer' }}>
-                <Button variant="h4" onClick={() => navigate('/')} sx={{ fontWeight: 'bold' }}>
+                <Button variant="h4" onClick={() => navigate('/')} sx={{ fontWeight: 'bold', color: "white" }}>
                     Whiteboard
                 </Button>
             </Box>
