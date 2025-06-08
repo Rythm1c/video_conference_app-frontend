@@ -55,7 +55,7 @@ export default function Login() {
                         width: '100%',
                         maxWidth: 400,
                         p: 4,
-                        borderRadius: 3,
+                        borderRadius: 1,
                         display: 'flex',
                         flexDirection: 'column',
                         gap: 3
@@ -66,7 +66,7 @@ export default function Login() {
                             display: 'flex',
                             justifyContent: 'center',
                             mb: 2,
-                            borderRadius: 2,
+                            borderRadius: 1,
                             background: 'linear-gradient(45deg, #2196F3 30%, #21CBF3 90%)',
                             p: 2,
                             transition: 'transform 0.2s',
@@ -87,7 +87,7 @@ export default function Login() {
                     </Typography>
 
                     {error && (
-                        <Alert severity="error" sx={{ borderRadius: 2 }}>
+                        <Alert severity="error" sx={{ borderRadius: 1 }}>
                             {error}
                         </Alert>
                     )}
@@ -109,7 +109,7 @@ export default function Login() {
                             }}
                             sx={{
                                 '& .MuiOutlinedInput-root': {
-                                    borderRadius: 2,
+                                    borderRadius: 1,
                                 }
                             }}
                         />
@@ -130,7 +130,7 @@ export default function Login() {
                             }}
                             sx={{
                                 '& .MuiOutlinedInput-root': {
-                                    borderRadius: 2,
+                                    borderRadius: 1,
                                 }
                             }}
                         />
@@ -141,7 +141,7 @@ export default function Login() {
                             disabled={loading}
                             sx={{
                                 py: 1.5,
-                                borderRadius: 2,
+                                borderRadius: 1,
                                 textTransform: 'none',
                                 fontSize: '1.1rem',
                                 position: 'relative'

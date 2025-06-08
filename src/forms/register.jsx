@@ -64,7 +64,7 @@ export default function Register() {
                         width: '100%',
                         maxWidth: 400,
                         p: 4,
-                        borderRadius: 3,
+                        borderRadius: 1,
                         display: 'flex',
                         flexDirection: 'column',
                         gap: 3
@@ -75,7 +75,7 @@ export default function Register() {
                             display: 'flex',
                             justifyContent: 'center',
                             mb: 2,
-                            borderRadius: 2,
+                            borderRadius: 1,
                             background: 'linear-gradient(45deg, #2196F3 30%, #21CBF3 90%)',
                             p: 2,
                             transition: 'transform 0.2s',
@@ -96,7 +96,7 @@ export default function Register() {
                     </Typography>
 
                     {error && (
-                        <Alert severity="error" sx={{ borderRadius: 2 }}>
+                        <Alert severity="error" sx={{ borderRadius: 1 }}>
                             {typeof error === "string"
                                 ? error
                                 : Object.values(error).flat().join(" ")}
@@ -120,7 +120,7 @@ export default function Register() {
                             }}
                             sx={{
                                 '& .MuiOutlinedInput-root': {
-                                    borderRadius: 2,
+                                    borderRadius: 1,
                                 }
                             }}
                         />
@@ -141,7 +141,7 @@ export default function Register() {
                             }}
                             sx={{
                                 '& .MuiOutlinedInput-root': {
-                                    borderRadius: 2,
+                                    borderRadius: 1,
                                 }
                             }}
                         />
@@ -162,7 +162,7 @@ export default function Register() {
                             }}
                             sx={{
                                 '& .MuiOutlinedInput-root': {
-                                    borderRadius: 2,
+                                    borderRadius: 1,
                                 }
                             }}
                         />
@@ -173,7 +173,7 @@ export default function Register() {
                             disabled={loading}
                             sx={{
                                 py: 1.5,
-                                borderRadius: 2,
+                                borderRadius: 1,
                                 textTransform: 'none',
                                 fontSize: '1.1rem',
                                 position: 'relative'
