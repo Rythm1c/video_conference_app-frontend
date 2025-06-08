@@ -1,13 +1,14 @@
 
 import { useParams } from "react-router-dom";
 import { useContext, useState, useRef } from "react";
-import { AuthContext } from "../contexts/AuthContext";
-import { Container, Box } from "@mui/material";
-import CanvasWhiteboard from "./canvas";
 
-import ParticipantsPanel from "./ParticipantsPanel";
+import { Container, Box } from "@mui/material";
+import CanvasWhiteboard from "../components/canvas";
+import ParticipantsPanel from "../components/ParticipantsPanel";
+
 import ChatPanel from "../components/ChatPanel";
 import RoomControls from "../components/RoomControls";
+import { AuthContext } from "../contexts/AuthContext";
 
 import RoomConnectionProvider from "../contexts/roomConnection";
 
