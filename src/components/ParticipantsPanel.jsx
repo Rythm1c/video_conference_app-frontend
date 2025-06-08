@@ -5,7 +5,7 @@ import {
 } from "@mui/material";
 import MicOffIcon from "@mui/icons-material/MicOff";
 import VideocamOffIcon from "@mui/icons-material/VideocamOff";
-import VideoCard from "../components/VideoCard";
+import VideoCard from "./VideoCard";
 import { RoomConnectionContext } from "../contexts/roomConnection";
 
 export default function ParticipantsPanel({ streams, setStreams, canvasOpen, users, setUsers, roomId, username, localStream }) {

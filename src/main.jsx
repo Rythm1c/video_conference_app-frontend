@@ -4,10 +4,10 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import App from "./App.jsx";
 import RoomPage from "./pages/RoomPage.jsx";
 import { AuthProvider, AuthContext } from "./contexts/AuthContext.jsx";
-import Login from "./pages/login.jsx";
-import Register from "./pages/register.jsx";
-import ListRooms from "./pages/ListRooms.jsx";
+import Login from "./forms/login.jsx";
+import Register from "./forms/register.jsx";
 import CreateRoom from "./forms/CreateRoom.jsx";
+import ListRooms from "./pages/ListRooms.jsx";
 import ThemeManager from "./contexts/themeCtx.jsx";
 import "./index.css";
 
