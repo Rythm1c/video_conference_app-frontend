@@ -7,147 +7,13 @@ import { Container, Box } from "@mui/material";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
 
-import CanvasWhiteboard from "../components/canvas";
-import ParticipantsPanel from "../components/ParticipantsPanel";
-
-import ChatPanel from "../components/ChatPanel";
 import RoomControls from "../components/RoomControls";
 import { AuthContext } from "../contexts/AuthContext";
 
 import RoomConnectionProvider from "../contexts/roomConnection";
+import NoCanvasLayout from "../layouts/NoCanvasLayout";
+import CanvasOpenLayout from "../layouts/CanvasOpenLayout";
 
-// no canvas open
-const FirstLayout = ({
-    streams,
-    setStreams,
-    chatOpen,
-    canvasOpen,
-    messages,
-    setMessages,
-    user,
-    users,
-    setUsers,
-    localStream,
-    roomId }) => {
-    return (
-        <Box sx={{
-            gridColumn: '1 / 4', // Span all columns
-            gridRow: '1 / 2',
-            height: "100%",
-            gap: 1,
-            display: "flex"
-        }}>
-
-            <Box sx={{
-                border: '1px solid #ccc',
-                flexGrow: 1,
-                width: chatOpen ? '80%' : '100%', // 4/5 of space when chat open, full width when closed
-                height: '100%',
-                transition: 'width 1.0s ease' // Smooth transition when chat opens/closes
-            }}>
-                <ParticipantsPanel
-                    setStreams={setStreams}
-                    streams={streams}
-                    users={users}
-                    setUsers={setUsers}
-                    roomId={roomId}
-                    username={user.username}
-                    canvasOpen={canvasOpen}
-                    localStream={localStream} />
-            </Box>
-
-            {chatOpen && (
-                <Box
-                    sx={{
-                        width: '20%', // 1/5 of space
-                        minWidth: '250px' // Minimum width to ensure chat is usable
-                    }}>
-                    <ChatPanel
-                        roomId={roomId}
-                        messages={messages}
-                        setMessages={setMessages}
-                        username={user.username} />
-                </Box>
-            )}
-
-        </Box>
-    );
-}
-// canvas open
-const SecondLayout = ({
-    streams,
-    setStreams,
-    chatOpen,
-    users,
-    setUsers,
-    messages,
-    setMessages,
-    token,
-    canvasOpen,
-    user,
-    localStream,
-    roomId }) => {
-    return (
-        <Box sx={{
-            gridColumn: '1 / 4',
-            gridRow: '1 / 2',
-            height: '100%',
-            display: 'flex',
-            flexDirection: 'column',
-            gap: 1
-        }}>
-            <Box sx={{
-                height: '80%',
-                display: 'flex',
-                gap: 1
-            }}>
-                <Box
-                    sx={{
-                        width: chatOpen ? '80%' : '100%',
-                        transition: 'width 0.3s ease'
-                    }}>
-                    <CanvasWhiteboard
-                        roomId={roomId}
-                        chatOpen={chatOpen}
-                        username={user.username}
-                        token={token} />
-
-                </Box>
-
-                {chatOpen && (
-                    <Box
-                        sx={{
-                            width: '20%',
-                            minWidth: '250px'
-                        }}>
-                        <ChatPanel
-                            roomId={roomId}
-                            messages={messages}
-                            setMessages={setMessages}
-                            username={user.username} />
-                    </Box>
-                )}
-            </Box>
-            <Box
-                sx={{
-                    height: '20%',
-                    overflow: 'auto',
-                    border: '1px solid #ccc',
-                    borderRadius: 0
-                }}>
-                <ParticipantsPanel
-                    streams={streams}
-                    setStreams={setStreams}
-                    roomId={roomId}
-                    users={users}
-                    setUsers={setUsers}
-                    username={user.username}
-                    canvasOpen={canvasOpen}
-                    localStream={localStream} />
-            </Box>
-        </Box>
-    );
-}
 
 export default function RoomPage() {
     const { roomId } = useParams();
@@ -158,22 +24,30 @@ export default function RoomPage() {
 
     const [users, setUsers] = useState([]);
     const prevUsersRef = useRef([]);
-    const [newJoinAlert, setNewJoinAlert] = useState(null);
+    const [alerts, setAlerts] = useState([]);
     const [remoteStreams, setRemoteStreams] = useState({});
     const [messages, setMessages] = useState([]);
 
     React.useEffect(() => {
         const prevUsers = prevUsersRef.current;
+        const joined = users.filter(u => !prevUsers.includes(u));
+        const left = prevUsers.filter(u => !users.includes(u));
 
-        // Identify any new user who wasn't previously present
-        const newUsers = users.filter(u => !prevUsers.includes(u));
+        const newAlerts = []
 
-        if (newUsers.length > 0) {
-            // Show the name of the first new user (customize as needed)
-            setNewJoinAlert(`${newUsers[0]} joined the room`);
-            setTimeout(() => setNewJoinAlert(null), 3000);
+        joined.forEach(user => {
+            newAlerts.push({ key: Date.now() + user, msg: `${user} joined`, severity: "success" });
+        });
+
+        left.forEach(user => {
+            newAlerts.push({ key: Date.now() + user, msg: `${user} left`, severity: "error" });
+        });
+
+        if (newAlerts.length > 0) {
+            setAlerts(prev => [...prev, ...newAlerts]);
         }
 
+        prevUsersRef.current = users;
         // Update the ref for next comparison
         prevUsersRef.current = users;
     }, [users]);
@@ -190,8 +64,29 @@ export default function RoomPage() {
                     overflow: 'hidden', // Prevent scrolling
                     backgroundColor: "grey.900"
                 }}>
+                {alerts.map((alert, index) => (
+                    <Snackbar
+                        key={alert.key}
+                        open
+                        anchorOrigin={{ vertical: "top", horizontal: "left" }}
+                        sx={{ top: `${index * 60 + 10}px` }} // stagger vertically
+                        autoHideDuration={3000}
+                        onClose={() =>
+                            setAlerts(prev => prev.filter(a => a.key !== alert.key))
+                        }
+                    >
+                        <MuiAlert
+                            severity={alert.severity}
+                            variant="filled"
+                            elevation={6}
+                            sx={{ minWidth: 200 }}
+                        >
+                            {alert.msg}
+                        </MuiAlert>
+                    </Snackbar>
+                ))}
                 {canvasOpen ?
-                    <SecondLayout
+                    <CanvasOpenLayout
                         setStreams={setRemoteStreams}
                         streams={remoteStreams}
                         chatOpen={chatOpen}
@@ -205,7 +100,7 @@ export default function RoomPage() {
                         localStream={localStream}
                         roomId={roomId} />
                     :
-                    <FirstLayout
+                    <NoCanvasLayout
                         setStreams={setRemoteStreams}
                         streams={remoteStreams}
                         messages={messages}
@@ -238,13 +133,6 @@ export default function RoomPage() {
                         }}
                     />
                 </Box>
-                <Snackbar
-                    open={!!newJoinAlert}
-                    anchorOrigin={{ vertical: 'top', horizontal: 'left' }}>
-                    <MuiAlert severity="info" variant="filled">
-                        {newJoinAlert}
-                    </MuiAlert>
-                </Snackbar>
             </Container>
         </RoomConnectionProvider>
     );
