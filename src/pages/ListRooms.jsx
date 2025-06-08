@@ -128,7 +128,7 @@ export default function ListRooms() {
                         startIcon={<AddIcon />}
                         onClick={() => navigate('/create-room')}
                         sx={{
-                            borderRadius: 2,
+                            borderRadius: 1,
                             textTransform: 'none',
                             px: 3
                         }}
@@ -139,7 +139,7 @@ export default function ListRooms() {
 
                 <Paper elevation={0} sx={{
                     p: 3,
-                    borderRadius: 3,
+                    borderRadius: 1,
                     backgroundColor: (theme) =>
                         theme.palette.mode === 'dark'
                             ? 'rgba(255, 255, 255, 0.05)'
@@ -167,7 +167,7 @@ export default function ListRooms() {
                             sx={{
                                 flexGrow: 1,
                                 '& .MuiOutlinedInput-root': {
-                                    borderRadius: 2,
+                                    borderRadius: 1,
                                     backgroundColor: (theme) => theme.palette.background.paper,
                                 }
                             }}
@@ -249,7 +249,7 @@ export default function ListRooms() {
                                                     display: 'flex',
                                                     alignItems: 'center',
                                                     justifyContent: 'space-between',
-                                                    borderRadius: 2,
+                                                    borderRadius: 1,
                                                     backgroundColor: (theme) => theme.palette.background.paper,
                                                 }}
                                             >
@@ -265,7 +265,7 @@ export default function ListRooms() {
                                                 <Button
                                                     variant="contained"
                                                     onClick={() => handleJoinClick(room)}
-                                                    sx={{ borderRadius: 2, textTransform: 'none' }}
+                                                    sx={{ borderRadius: 1, textTransform: 'none' }}
                                                 >
                                                     Join
                                                 </Button>
@@ -283,7 +283,7 @@ export default function ListRooms() {
                 open={open}
                 onClose={() => setOpen(false)}
                 PaperProps={{
-                    sx: { borderRadius: 2 }
+                    sx: { borderRadius: 1 }
                 }}
             >
                 <DialogTitle>Enter Room Password</DialogTitle>
