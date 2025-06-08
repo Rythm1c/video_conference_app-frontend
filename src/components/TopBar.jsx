@@ -41,7 +41,23 @@ function TopBar() {
     return (
         <AppBar position="static">
             <Toolbar sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                <Button variant="h6" onClick={() => navigate("/")}>Whiteboard</Button>
+                <Box sx={{
+                    display: "flex", flexDirection: "row", alignItems: "center"
+                }}>
+                    < Box
+                        onClick={() => navigate("/")}
+                        component={"img"}
+                        src="/logo.svg"
+                        alt='logo'
+                        sx={{
+                            height: 85,
+                            mr: 2
+                        }} />
+
+                    <Typography variant="h6" sx={{ fontWeight: "bold" }} noWrap component="div" >
+                        Whiteboard
+                    </Typography>
+                </Box>
 
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
 
