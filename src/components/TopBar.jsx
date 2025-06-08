@@ -51,7 +51,12 @@ function TopBar() {
                         alt='logo'
                         sx={{
                             height: 85,
-                            mr: 2
+                            cursor: 'pointer',
+                            mr: 2,
+                            '&:active': {
+                                transform: 'scale(0.95)',
+                            },
+                            transition: 'transform 0.1s ease-in-out'
                         }} />
 
                     <Typography variant="h6" sx={{ fontWeight: "bold" }} noWrap component="div" >

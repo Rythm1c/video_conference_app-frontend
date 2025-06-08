@@ -27,6 +27,8 @@ export default function CanvasWhiteboard({ chatOpen, roomId, username, token }) 
 
   const [brushSize, setBrushSize] = useState(4);
   const [color, setColor] = useState("#000000");
+  const [backgroundColor, setBackgroundColor] = useState("#ffffff");
+
 
   const [undoStack, setUndoStack] = useState([]);
   const [redoStack, setRedoStack] = useState([]);
@@ -54,20 +56,32 @@ export default function CanvasWhiteboard({ chatOpen, roomId, username, token }) 
     const dpr = window.devicePixelRatio || 1;
 
     // Get actual container size
-    const displayWidth = parent.clientWidth;
-    const displayHeight = parent.clientHeight;
+    const rect = parent.getBoundingClientRect();
+    const displayWidth = rect.width;
+    const displayHeight = rect.height;
 
-    // Set canvas size taking pixel ratio into account
+    // Check if size actually changed to prevent unnecessary resizing
+    if (canvas.width === displayWidth * dpr && canvas.height === displayHeight * dpr) {
+      return;
+    }
+
+    // Save current drawing
+    const tempCanvas = document.createElement('canvas');
+    const tempCtx = tempCanvas.getContext('2d');
+    tempCanvas.width = canvas.width;
+    tempCanvas.height = canvas.height;
+    tempCtx.drawImage(canvas, 0, 0);
+
+    // Update canvas size
     canvas.width = displayWidth * dpr;
     canvas.height = displayHeight * dpr;
 
-    // Scale down the canvas CSS size
+    // Update CSS size
     canvas.style.width = `${displayWidth}px`;
     canvas.style.height = `${displayHeight}px`;
 
-    // Scale the drawing context
-    const ctx = canvas.getContext("2d");
-    ctx.setTransform(1, 0, 0, 1, 0, 0);  // Reset transform
+    // Scale context for retina display
+    const ctx = canvas.getContext('2d');
     ctx.scale(dpr, dpr);
 
     // Redraw existing content after resize
@@ -329,6 +343,46 @@ export default function CanvasWhiteboard({ chatOpen, roomId, username, token }) 
             </Box>
           </Tooltip>
 
+          <Tooltip title="Background Color">
+          <Box sx={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
+          <input
+          type="color"
+          value={backgroundColor}
+          onChange={(e) => {
+            setBackgroundColor(e.target.value);
+            const canvas = canvasRef.current;
+            const ctx = canvas.getContext("2d");
+            canvas.style.backgroundColor = e.target.value;
+          }}
+          style={{
+            width: '0',
+            height: '0',
+            padding: '0',
+            border: 'none',
+            position: 'absolute',
+            left: '50%',
+            transform: 'translateX(-50%)',
+          opacity: 0,
+          cursor: 'pointer'
+          }}
+          />
+          <IconButton
+          sx={{
+            bgcolor: backgroundColor,
+            '&:hover': {
+              bgcolor: backgroundColor,
+              filter: 'brightness(0.9)'
+            }
+          }}
+          onClick={() => document.querySelectorAll('input[type="color"]')[1].click()}
+          >
+          <PaletteIcon sx={{ color: backgroundColor === '#ffffff' ? 'black' : 'white' }} />
+          </IconButton>
+          </Box>
+          </Tooltip>
+
+          <Divider orientation="horizontal" flexItem />
+
           <Divider orientation="vertical" flexItem />
           <Tooltip title="Undo">
             <IconButton onClick={handleUndo} disabled={!undoStack.length}>
@@ -365,6 +419,8 @@ export default function CanvasWhiteboard({ chatOpen, roomId, username, token }) 
           position: "relative",
           border: "1px solid #ccc",
           borderRadius: 1,
+          overflow: "hidden",
+          backgroundColor: backgroundColor
         }}>
         <canvas
           ref={canvasRef}
@@ -374,7 +430,8 @@ export default function CanvasWhiteboard({ chatOpen, roomId, username, token }) 
             top: 0,
             left: 0,
             width: "100%",
-            height: "100%"
+            height: "100%",
+            display: "block"
           }} />
       </Box>
 
