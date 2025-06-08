@@ -1,8 +1,12 @@
 
 import { useParams } from "react-router-dom";
 import { useContext, useState, useRef } from "react";
+import React from "react";
 
 import { Container, Box } from "@mui/material";
+import Snackbar from "@mui/material/Snackbar";
+import MuiAlert from "@mui/material/Alert";
+
 import CanvasWhiteboard from "../components/canvas";
 import ParticipantsPanel from "../components/ParticipantsPanel";
 
@@ -153,8 +157,26 @@ export default function RoomPage() {
     const localStream = useRef(null);
 
     const [users, setUsers] = useState([]);
+    const prevUsersRef = useRef([]);
+    const [newJoinAlert, setNewJoinAlert] = useState(null);
     const [remoteStreams, setRemoteStreams] = useState({});
     const [messages, setMessages] = useState([]);
+
+    React.useEffect(() => {
+        const prevUsers = prevUsersRef.current;
+
+        // Identify any new user who wasn't previously present
+        const newUsers = users.filter(u => !prevUsers.includes(u));
+
+        if (newUsers.length > 0) {
+            // Show the name of the first new user (customize as needed)
+            setNewJoinAlert(`${newUsers[0]} joined the room`);
+            setTimeout(() => setNewJoinAlert(null), 3000);
+        }
+
+        // Update the ref for next comparison
+        prevUsersRef.current = users;
+    }, [users]);
 
     return (
         <RoomConnectionProvider roomId={roomId} username={user.username}>
@@ -204,7 +226,6 @@ export default function RoomPage() {
                         gridRow: '2 / 3',
                         height: 'auto', // Height based on content
                         backgroundColor: 'grey.800',
-
                     }}>
 
                     <RoomControls
@@ -217,7 +238,13 @@ export default function RoomPage() {
                         }}
                     />
                 </Box>
-
+                <Snackbar
+                    open={!!newJoinAlert}
+                    anchorOrigin={{ vertical: 'top', horizontal: 'left' }}>
+                    <MuiAlert severity="info" variant="filled">
+                        {newJoinAlert}
+                    </MuiAlert>
+                </Snackbar>
             </Container>
         </RoomConnectionProvider>
     );
