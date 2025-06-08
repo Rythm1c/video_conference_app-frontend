@@ -50,7 +50,7 @@ function TopBar() {
                         src="/logo.svg"
                         alt='logo'
                         sx={{
-                            height: 85,
+                            height: 70,
                             cursor: 'pointer',
                             mr: 2,
                             '&:active': {
